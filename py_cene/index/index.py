@@ -12,6 +12,8 @@ class Index:
     # TODO
     # [ ] Figure out segment prefixes
     # [ ] When commit happens, close segment
+    # [ ] Fix commit logic
+    # [ ] Add soft commit segments to self.segments
     def __init__(self, name, prefixes_iter=None):
         self.name = name
         if not prefixes_iter:
@@ -47,8 +49,8 @@ class Index:
         self.commit()
         
     def hard_commit(self):
-        self._generate_new_prefix()
         self.commit()
+        self._generate_new_prefix()
     
     def get_segments(self):
         return self.segments
