@@ -4,10 +4,18 @@ from collections import OrderedDict
 
 
 class Segment:
+    # TODO
+    # [ ] Convert this to a bitmap
     def __init__(self, segment_prefix):
         self.dictionary = OrderedDict()
         self.name = segment_prefix
         self.comitted = False
+
+    def __repr__(self):
+        return f"Segment({self.name})"
+
+    def __str__(self):
+        return f"{self.name}"
 
     def write(self, document_id, text):
         if self.comitted:

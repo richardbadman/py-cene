@@ -20,6 +20,7 @@ class Index:
             self.prefixes_iter = prefixes_iter
         
         self.is_open = False
+        self.prefix = None
         self.current_segment = None
         self.segments = set()
 
@@ -38,19 +39,27 @@ class Index:
         self.current_segment.write(document_id, text)
 
     def commit(self):
-        if not self.current_segment:
-            raise ValueError("No segment to commit")
-
         self.current_segment.commit()
         self.segments.add(self.current_segment)
         self._generate_new_segment()
-
+    
+    def soft_commit(self):
+        self.commit()
+        
+    def hard_commit(self):
+        self._generate_new_prefix()
+        self.commit()
+    
     def get_segments(self):
         return self.segments
 
-    def _generate_new_segment(self):
+    def _generate_new_prefix(self):
         try:
-            prefix = next(self.prefixes_iter)
-            self.current_segment = Segment(prefix)
+            self.prefix = next(self.prefixes_iter)
         except StopIteration:
             raise ValueError("Segment limit reached for this index, unable to create new segment")
+    
+    def _generate_new_segment(self):
+        if not self.prefix:
+            self._generate_new_prefix()
+        self.current_segment = Segment(self.prefix)
