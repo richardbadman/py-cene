@@ -1,20 +1,24 @@
 #!/usr/bin/env python
 
-from py_cene.index.segment import Segment
+from py_cene.analyser import format_text
+from py_cene.index.index import Index
 
 
 def main():
-    segment = Segment("seg")
+    index = Index("test")
     documents = {
         1: "Winter is coming",
         2: "I hate winter coats!",
         3: "Christmas is, early this year"
     }
     
-    for document_id, document in documents.items():
-        segment.write(document, document_id)
+    with index as open_index:
+        for document_id, document in documents.items():
+            text = format_text(document)
+            open_index.write(document_id, text)
+        open_index.hard_commit()
 
-    print(segment.get())
+    print(index.get_segments())
 
 
 if __name__ == "__main__":
