@@ -1,6 +1,6 @@
 from py_cene.index.segment import Segment
 
-def test_word_frequency_expected():
+def test_word_frequency():
     documents = {
         1: "winter is coming",
         2: "I hate winter coats"
@@ -14,3 +14,11 @@ def test_word_frequency_expected():
     actual_frequency_for_winter = data["winter"]["frequency"]
 
     assert expected_frequency_for_winter == actual_frequency_for_winter
+
+def test_document_mapping():
+    # TODO
+    pass
+
+def test_when_segment_committed_cannot_be_written_to_again():
+    # TODO
+    pass
