@@ -3,7 +3,7 @@ import time
 
 from collections import OrderedDict
 
-from stopwords import STOPWORDS
+from py_cene.stopwords import STOPWORDS
 """
 Brain dump
 

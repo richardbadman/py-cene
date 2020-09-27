@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from index.segment import Segment
+from py_cene.index.segment import Segment
 
 
 def main():

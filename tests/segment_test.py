@@ -1,4 +1,4 @@
-from src.index.segment import Segment
+from py_cene.index.segment import Segment
 
 def test_word_frequency_expected():
     documents = {
