@@ -1,28 +1,16 @@
 from py_cene.index.segment import Segment
 
 
-PREFIXES = {
-    "one",
-    "two",
-    "three",
-    "four"
-}
-
 class Index:
     # TODO
-    # [ ] Figure out segment prefixes
-    # [ ] When commit happens, close segment
-    # [ ] Fix commit logic
-    # [ ] Add soft commit segments to self.segments
-    def __init__(self, name, prefixes_iter=None):
+    # [x] When commit happens, close segment
+    # [x] Fix commit logic
+    # [ ] Implement names
+    # [ ] Support search
+    def __init__(self, name):
         self.name = name
-        if not prefixes_iter:
-            self.prefixes_iter = iter(PREFIXES)
-        else:
-            self.prefixes_iter = prefixes_iter
         
         self.is_open = False
-        self.prefix = None
         self.current_segment = None
         self.segments = set()
 
@@ -45,23 +33,8 @@ class Index:
         self.segments.add(self.current_segment)
         self._generate_new_segment()
     
-    def soft_commit(self):
-        self.commit()
-        
-    def hard_commit(self):
-        self.commit()
-        self._generate_new_prefix()
-    
     def get_segments(self):
         return self.segments
 
-    def _generate_new_prefix(self):
-        try:
-            self.prefix = next(self.prefixes_iter)
-        except StopIteration:
-            raise ValueError("Segment limit reached for this index, unable to create new segment")
-    
     def _generate_new_segment(self):
-        if not self.prefix:
-            self._generate_new_prefix()
-        self.current_segment = Segment(self.prefix)
+        self.current_segment = Segment()

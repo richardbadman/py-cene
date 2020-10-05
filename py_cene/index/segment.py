@@ -6,9 +6,10 @@ from collections import OrderedDict
 class Segment:
     # TODO
     # [ ] Convert this to a bitmap
-    def __init__(self, segment_prefix):
+    # [ ] support search
+    def __init__(self):
         self.dictionary = OrderedDict()
-        self.name = segment_prefix
+        self.name = None
         self.comitted = False
 
     def __repr__(self):
@@ -32,8 +33,8 @@ class Segment:
         print(f"Written document id {document_id}")
         
     def commit(self):
-        hash_id = str(hash(time.time()))[:6]
-        self.name = f"{self.name}_{hash_id}"
+        hash_id = str(hash(time.time()))[:8]
+        self.name = f"{hash_id}"
         print(f"Commiting segment: {self.name}")
         self.comitted = True
 
