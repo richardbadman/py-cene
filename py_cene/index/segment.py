@@ -38,10 +38,6 @@ class Segment:
         print(f"Commiting segment: {self.name}")
         self.comitted = True
 
-    # TODO - Not actually have this
-    def get(self):
-        return self.dictionary
-
     def search(self, term):
         if term in self.dictionary:
             return {
