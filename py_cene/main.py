@@ -16,8 +16,7 @@ def main():
         for document_id, document in documents.items():
             text = format_text(document)
             open_index.write(document_id, text)
-            open_index.soft_commit()
-        open_index.hard_commit()
+        open_index.commit()
 
     print(index.get_segments())
 
