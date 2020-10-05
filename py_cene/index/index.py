@@ -6,8 +6,8 @@ class Index:
     # [x] When commit happens, close segment
     # [x] Fix commit logic
     # [ ] Implement names
-    # [ ] Support search
-    # [ ] add isopen support to writing and reading
+    # [x] Support search
+    # [x] add isopen support to writing and reading
     def __init__(self, name):
         self.name = name
         

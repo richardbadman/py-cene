@@ -6,7 +6,7 @@ from collections import OrderedDict
 class Segment:
     # TODO
     # [ ] Convert this to a bitmap
-    # [ ] support search
+    # [x] support search
     def __init__(self):
         self.dictionary = OrderedDict()
         self.name = None
