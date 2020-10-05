@@ -23,7 +23,7 @@ def test_word_frequency():
     assert expected_frequency_for_winter == actual_frequency_for_winter
 
 def test_document_mapping():
-    # TODO
+    # TODO - Needs search support first
     pass
 
 def test_when_segment_committed_cannot_be_written_to_again():

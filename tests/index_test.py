@@ -26,12 +26,7 @@ def test_when_soft_committing_three_segments_exist():
 def test_when_trying_to_open_index_when_already_open_exception_is_thrown():
     index = Index("testing_index")
     duplicate = index
-    with index as open_index:
+    with index as open_index: # pylint: disable=unused-variable
         with raises(ValueError):
-            with index as should_raise:
-                assert False
-                
-    with index as open_index:
-        with raises(ValueError):
-            with duplicate as should_raise:
+            with duplicate as should_raise:  # pylint: disable=unused-variable
                 assert False
