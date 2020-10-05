@@ -44,5 +44,7 @@ class Segment:
 
     def search(self, term):
         if term in self.dictionary:
-            return self.dictionary[term]
+            return {
+                term: self.dictionary[term]
+            }
         return dict()

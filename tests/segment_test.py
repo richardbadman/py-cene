@@ -23,8 +23,25 @@ def test_word_frequency():
     assert expected_frequency_for_winter == actual_frequency_for_winter
 
 def test_document_mapping():
-    # TODO - Needs search support first
-    pass
+    segment = Segment()
+    for document_id, document in DOCUMENTS.items():
+        text = format_text(document)
+        segment.write(document_id, text)
+        
+    results = segment.search("winter")
+    expected_document_ids = [1, 2]
+    actual_document_ids = [
+        document_id
+        for term, data in results.items()
+        for document_id in data["documents"]
+    ]
+    
+    assert expected_document_ids == actual_document_ids
+
+def test_search_term_returning_no_results():
+    segment = Segment()
+    results = segment.search("empty")
+    assert results == dict()
 
 def test_when_segment_committed_cannot_be_written_to_again():
     segment = Segment()

@@ -7,6 +7,7 @@ class Index:
     # [x] Fix commit logic
     # [ ] Implement names
     # [ ] Support search
+    # [ ] add isopen support to writing and reading
     def __init__(self, name):
         self.name = name
         
@@ -24,6 +25,8 @@ class Index:
         self.is_open = False
 
     def write(self, document_id, text):
+        if not self.is_open:
+            raise ValueError("Index must be open to write")
         if not self.current_segment:
             self._generate_new_segment()
         self.current_segment.write(document_id, text)
@@ -37,6 +40,8 @@ class Index:
         return self.segments
 
     def search(self, term):
+        if not self.is_open:
+            raise ValueError("Index must be open to search")
         results = dict()
         for segment in self.segments:
             current_results = segment.search(term)
