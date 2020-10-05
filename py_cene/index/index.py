@@ -36,5 +36,23 @@ class Index:
     def get_segments(self):
         return self.segments
 
+    def search(self, term):
+        results = dict()
+        for segment in self.segments:
+            current_results = segment.search(term)
+            _merge_results(current_results, results)
+        return results
+
     def _generate_new_segment(self):
         self.current_segment = Segment()
+
+
+def _merge_results(new_results, results):
+    for term, data in new_results.items():
+        if term in results:
+            results[term]["frequency"] += data["frequency"]
+            results[term]["documents"] = list(
+                set(results[term]["documents"]).union(set(data["documents"]))
+            )
+        else:
+            results[term] = data

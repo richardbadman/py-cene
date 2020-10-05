@@ -41,3 +41,8 @@ class Segment:
     # TODO - Not actually have this
     def get(self):
         return self.dictionary
+
+    def search(self, term):
+        if term in self.dictionary:
+            return self.dictionary[term]
+        return dict()
