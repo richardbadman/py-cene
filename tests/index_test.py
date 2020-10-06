@@ -80,3 +80,5 @@ def test_searching_an_index_thats_not_open_raises_exception():
     with raises(ValueError):
         for document_id, document in DOCUMENTS.items():
             index.search("fail")
+
+# TODO - test that when writing and NOT committing, you can't search

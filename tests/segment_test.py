@@ -51,3 +51,5 @@ def test_when_segment_committed_cannot_be_written_to_again():
     segment.commit()
     with raises(ValueError):
         segment.write(3, "this will fail")
+
+# TODO - test that when writing and NOT committing, you can't search
