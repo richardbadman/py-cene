@@ -1,4 +1,4 @@
-from py_cene.index.directory import Directory
+from py_cene.directory import Directory
 
 
 class PersistantDirectory(Directory):
