@@ -1,25 +1,25 @@
 #!/usr/bin/env python
 
 from py_cene.analyser import format_text
-from py_cene.index.index import Index
+from py_cene.directory import DirectoryFactory
 
 
 def main():
-    index = Index("test")
     documents = {
         1: "Winter is coming",
         2: "I hate winter coats!",
         3: "Christmas is, early this year"
     }
+
+    directory_factory = DirectoryFactory()
+    cache_directory = directory_factory.create("CACHE")
+    cache_directory.create_new_index("test")
     
-    with index as open_index:
-        for document_id, document in documents.items():
-            text = format_text(document)
-            open_index.write(document_id, text)
-        open_index.commit()
-
-    print(index.get_segments())
-
+    cache_directory.write_to_index("test", documents)
+    cache_directory.commit_index("test")
+    
+    results = cache_directory.search("winter")
+    print(results)
 
 if __name__ == "__main__":
     main()
