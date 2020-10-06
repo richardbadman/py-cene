@@ -1,5 +1,5 @@
 from py_cene.analyser import format_text
-from py_cene.directory import Directory
+from py_cene.directory.directory import Directory
 from py_cene.index import Index
 
 
@@ -21,7 +21,7 @@ class CacheDirectory(Directory):
         index = self._get_index(index_name)
         # TODO - implement a writer
         with index as open_index:
-            for document_id, document in documents:
+            for document_id, document in documents.items():
                 text = format_text(document)
                 open_index.write(document_id, text)
         

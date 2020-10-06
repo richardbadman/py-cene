@@ -1,13 +1,6 @@
-from py_cene.directory import (
-    CacheDirectory,
-    PersistantDirectory
-)
-
+from py_cene.directory.cache_directory import CacheDirectory
 
 class DirectoryFactory:
-    def __init__(self):
-        self.directory = None
-    
     def create(self, type):
         if type == "CACHE":
             return self._create_cache_directory()
