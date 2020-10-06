@@ -56,6 +56,7 @@ class Index:
 
 
 def _merge_results(new_results, results):
+    # TODO - Fix, I want frequency per doc id
     for term, data in new_results.items():
         if term in results:
             results[term]["frequency"] += data["frequency"]
