@@ -39,6 +39,9 @@ class Index:
     def get_segments(self):
         return self.segments
 
+    def get_name(self):
+        return self.name
+
     def search(self, term):
         if not self.is_open:
             raise ValueError("Index must be open to search")
