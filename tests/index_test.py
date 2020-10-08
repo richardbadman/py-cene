@@ -6,7 +6,7 @@ from py_cene.index.index import Index
 
 DOCUMENTS = {
     1: "This is a line of text",
-    2: "This is another line of text",
+    2: "This is another line of text, oh a line",
     3: "A completely different type of message"
 }
 
@@ -85,3 +85,19 @@ def test_when_writing_and_not_committing_then_data_isnt_searchable():
 
             results = open_index.search("empty")
             assert results == dict()
+
+def test_frequencey_sorted_when_searching_term():
+    index = Index("testing_index")
+    results = dict()
+    with index as open_index:
+        for document_id, document in DOCUMENTS.items():
+            text = format_text(document)
+            open_index.write(document_id, text)
+            open_index.commit()
+            
+        results = index.search("line")
+        
+    expected_sorted_document_ids = [2, 1]
+    actual_sorted_document_ids = list(results["line"].keys())
+    
+    assert sorted(expected_sorted_document_ids) == actual_sorted_document_ids

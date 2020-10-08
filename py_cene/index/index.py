@@ -45,13 +45,15 @@ class Index:
         return self.name
 
     def search(self, term):
+        # TODO - Implement returning the documents affected
         if not self.is_open:
             raise ValueError("Index must be open to search")
         results = dict()
         for segment in self.segments:
             segment_results = segment.search(term)
             _merge_results(segment_results, results)
-        return results
+
+        return _sort_results(results)
 
     def _generate_new_segment(self):
         self.current_segment = Segment()
@@ -66,3 +68,17 @@ def _merge_results(segment_results, results):
                 results[term][document_id] += frequency
             else:
                 results[term][document_id] = 1
+
+
+def _sort_results(results):
+    return {
+        term: {
+            document_id: frequency
+            for document_id, frequency in sorted(
+                data.items(),
+                key=lambda item: item[1],
+                reverse=True)
+        }
+        for term, data in results.items()
+        for document_id, frequency in data.items()
+    }
