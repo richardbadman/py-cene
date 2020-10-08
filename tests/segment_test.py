@@ -16,9 +16,14 @@ def test_word_frequency():
         text = format_text(document)
         segment.write(document_id, text)
         
-    data = segment.get()
+    data = segment.search("winter")
+    print(data)
     expected_frequency_for_winter = 2
-    actual_frequency_for_winter = data["winter"]["frequency"]
+    frequencies = [
+        frequency
+        for document_id, frequency in data["winter"].items()
+    ]
+    actual_frequency_for_winter = sum(frequencies)
 
     assert expected_frequency_for_winter == actual_frequency_for_winter
 
@@ -30,11 +35,7 @@ def test_document_mapping():
         
     results = segment.search("winter")
     expected_document_ids = [1, 2]
-    actual_document_ids = [
-        document_id
-        for term, data in results.items()
-        for document_id in data["documents"]
-    ]
+    actual_document_ids = list(results["winter"].keys())
     
     assert expected_document_ids == actual_document_ids
 
@@ -52,4 +53,10 @@ def test_when_segment_committed_cannot_be_written_to_again():
     with raises(ValueError):
         segment.write(3, "this will fail")
 
-# TODO - test that when writing and NOT committing, you can't search
+def test_when_writing_and_not_committing_data_isnt_searchable():
+    segment = Segment()
+    for document_id, document in DOCUMENTS.items():
+        text = format_text(document)
+        segment.write(document_id, text)
+    results = segment.search("empty")
+    assert results == dict()

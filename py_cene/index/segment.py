@@ -22,14 +22,13 @@ class Segment:
         if self.comitted:
             raise ValueError("Trying to write to already committed segment")
         for word in text:
-            if word in self.dictionary.keys():
-                self.dictionary[word]["frequency"] += 1
-                self.dictionary[word]["documents"].append(document_id)
+            if word in self.dictionary:
+                if document_id in self.dictionary[word]:
+                    self.dictionary[word][document_id] += 1
+                else:
+                    self.dictionary[word][document_id] = 1
             else:
-                self.dictionary[word] = {
-                    "frequency": 1,
-                    "documents": [document_id]
-                }
+                self.dictionary[word] = {document_id: 1}
         print(f"Written document id {document_id}")
         
     def commit(self):
@@ -39,6 +38,7 @@ class Segment:
         self.comitted = True
 
     def search(self, term):
+        print(f"wtf: {self.dictionary}")
         if term in self.dictionary:
             return {
                 term: self.dictionary[term]
