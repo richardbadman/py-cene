@@ -43,13 +43,9 @@ def test_search_term_over_a_number_of_segments():
         results = index.search("line")
         
     expected_document_ids = [1, 2]
-    actual_document_ids = [
-        document_id
-        for term, data in results.items()
-        for document_id in data["documents"]
-    ]
+    actual_document_ids = list(results["line"].keys())
     
-    assert expected_document_ids == actual_document_ids
+    assert sorted(expected_document_ids) == sorted(actual_document_ids)
 
 def test_search_term_on_empty_index_returns_no_results():
     index = Index("testing_index")
@@ -81,4 +77,11 @@ def test_searching_an_index_thats_not_open_raises_exception():
         for document_id, document in DOCUMENTS.items():
             index.search("fail")
 
-# TODO - test that when writing and NOT committing, you can't search
+def test_when_writing_and_not_committing_then_data_isnt_searchable():
+    index = Index("testing_index")
+    for document_id, document in DOCUMENTS.items():
+        with index as open_index:
+            open_index.write(document_id, document)
+
+            results = open_index.search("empty")
+            assert results == dict()

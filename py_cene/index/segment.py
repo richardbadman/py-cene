@@ -38,7 +38,6 @@ class Segment:
         self.comitted = True
 
     def search(self, term):
-        print(f"wtf: {self.dictionary}")
         if term in self.dictionary:
             return {
                 term: self.dictionary[term]

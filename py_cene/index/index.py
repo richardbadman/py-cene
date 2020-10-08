@@ -14,6 +14,7 @@ class Index:
         self.is_open = False
         self.current_segment = None
         self.segments = set()
+        self.documents = dict()
 
     def __enter__(self):
         if self.is_open:
@@ -30,6 +31,7 @@ class Index:
         if not self.current_segment:
             self._generate_new_segment()
         self.current_segment.write(document_id, text)
+        self.documents[document_id] = text
 
     def commit(self):
         self.current_segment.commit()
@@ -47,21 +49,20 @@ class Index:
             raise ValueError("Index must be open to search")
         results = dict()
         for segment in self.segments:
-            current_results = segment.search(term)
-            _merge_results(current_results, results)
+            segment_results = segment.search(term)
+            _merge_results(segment_results, results)
         return results
 
     def _generate_new_segment(self):
         self.current_segment = Segment()
 
 
-def _merge_results(new_results, results):
-    # TODO - Fix, I want frequency per doc id
-    for term, data in new_results.items():
-        if term in results:
-            results[term]["frequency"] += data["frequency"]
-            results[term]["documents"] = list(
-                set(results[term]["documents"]).union(set(data["documents"]))
-            )
-        else:
-            results[term] = data
+def _merge_results(segment_results, results):
+    for term, details in segment_results.items():
+        if term not in results:
+            results[term] = {}
+        for document_id, frequency in details.items():
+            if document_id in results[term]:
+                results[term][document_id] += frequency
+            else:
+                results[term][document_id] = 1
