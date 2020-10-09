@@ -17,11 +17,10 @@ def test_word_frequency():
         segment.write(document_id, text)
         
     data = segment.search("winter")
-    print(data)
     expected_frequency_for_winter = 2
     frequencies = [
         frequency
-        for document_id, frequency in data["winter"].items()
+        for document_id, frequency in data.items()
     ]
     actual_frequency_for_winter = sum(frequencies)
 
@@ -35,7 +34,7 @@ def test_document_mapping():
         
     results = segment.search("winter")
     expected_document_ids = [1, 2]
-    actual_document_ids = list(results["winter"].keys())
+    actual_document_ids = list(results.keys())
     
     assert expected_document_ids == actual_document_ids
 
