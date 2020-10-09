@@ -4,40 +4,31 @@ from py_cene.index import Index
 
 
 class CacheDirectory(Directory):
+    # TODO
+    # [ ] - Imeplement naming
     def __init__(self):
         super().__init__()
-        self.indexes = set()
+        self.index = Index()
+        self.documents = dict()
     
-    def get_index_names(self):
-        return {
-            index.get_name()
-            for index in self.indexes
-        }
+    def write_to_index(self, document_id, text, document):
+        # TODO - make it so this only works if called by the index_writer
+        with self.index as open_index:
+            open_index.write(document_id, text)
+        self.documents[document_id] = document
+            
+    def commit(self):
+        # TODO - make it so this only works if called by the index_writer
+        self.index.commit()
 
-    def create_new_index(self, name):
-        self.indexes.add(Index(name))
+    def search_index(self, term):
+        # TODO - make it so this only works if called by the index_writer
+        with self.index as open_index:
+            return open_index.search(term)
 
-    def write_to_index(self, index_name, documents):
-        index = self._get_index(index_name)
-        # TODO - implement a writer
-        with index as open_index:
-            for document_id, document in documents.items():
-                text = format_text(document)
-                open_index.write(document_id, text)
-        
-    def commit_index(self, index_name):
-        index = self._get_index(index_name)
-        index.commit()
-
-    def search(self, term):
-        results = []
-        for index in self.indexes:
-            with index as open_index:
-                results.append(open_index.search(term))
-        return results
-    
-    def _get_index(self, index_name):
-        for index in self.indexes:
-            if index.get_name() == index_name:
-                return index
-        raise ValueError(f"Unable to find index with name: {index_name}")
+    def get_documents(self, document_ids):
+        return [
+            document
+            for document_id, document in self.documents.items()
+            if document_id in document_ids
+        ]
