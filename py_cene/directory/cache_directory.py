@@ -17,6 +17,7 @@ class CacheDirectory(Directory):
             open_index.write(document_id, text)
 
     def append_document(self, document_id, document):
+        # TODO - call this when committing, and flush to rest of documents
         self.documents[document_id] = document
             
     def commit(self):
