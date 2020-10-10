@@ -11,10 +11,12 @@ class CacheDirectory(Directory):
         self.index = Index()
         self.documents = dict()
     
-    def write_to_index(self, document_id, text, document):
+    def write_to_index(self, document_id, text):
         # TODO - make it so this only works if called by the index_writer
         with self.index as open_index:
             open_index.write(document_id, text)
+
+    def append_document(self, document_id, document):
         self.documents[document_id] = document
             
     def commit(self):

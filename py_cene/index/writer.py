@@ -1,4 +1,5 @@
 import uuid
+import zlib
 
 from py_cene.analyser import format_text
 
@@ -12,10 +13,16 @@ class IndexWriter:
         
     def add_document(self, document):
         # TODO - Make it so only this method can write
-        # TODO - append document to directory upon successful indexing
         text = format_text(document)
         document_id = uuid.uuid4().hex
-        self.directory.write_to_index(document_id, text, document)
+        try:
+            self.directory.write_to_index(document_id, text)
+        except Exception:
+            # TODO
+            pass
+        finally:
+            compressed_document = zlib.compress(str.encode(document))
+            self.directory.append_document(document_id, compressed_document)
 
     def commit(self):
         self.directory.commit()

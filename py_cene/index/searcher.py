@@ -1,3 +1,6 @@
+import zlib
+
+
 class IndexSearcher:
     # TODO
     # [ ] - give logic to directory to make it bound to this class
@@ -9,7 +12,11 @@ class IndexSearcher:
             self.directory.search_index(term)
         )
         document_ids = results.keys()
-        return self.directory.get_documents(document_ids)
+        compressed_documents = self.directory.get_documents(document_ids)
+        return [
+            zlib.decompress(document).decode()
+            for document in compressed_documents
+        ]
         
 
 def _sort_results(results):
