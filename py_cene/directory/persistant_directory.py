@@ -104,3 +104,17 @@ def _write_data_to_file(filename, data):
     with open(filename, "ab") as open_document_file:
         open_document_file.write(compressed_bytes)
         open_document_file.write(linesep.encode())
+
+"""
+In [64]: def file2dict(filename):
+    ...:     with open(filename, 'rb') as fd:
+    ...:         for zbytes in fd:
+    ...:             bytes = zlib.decompress(zbytes)
+    ...:             data = pickle.loads(bytes)
+    ...:             print(data)
+    ...:
+
+In [65]: file2dict(df)
+{'132UDI5489FDJHI': 'This is a string of text wow!'}
+{'14378UHHJWD823J': "ANother string? omg i'm so lucky!"}
+"""
