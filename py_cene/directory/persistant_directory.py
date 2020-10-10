@@ -28,11 +28,18 @@ class PersistantDirectory(Directory):
         self.closed_index_files = []
     
     def get_directory(self, directory_path):
+        # TODO - Need to figure out how to call this better on object creation
         if path.exists(directory_path) and path.isdir(directory_path):
+            self.directory_path = directory_path
+
             all_files = _get_files_in_path(directory_path)
-            self.open_document_file = _get_open_file(_get_by_extension(all_files, OPEN_DOCUMENT_EXTENSION))
-            self.open_index_file = _get_open_file(_get_by_extension(all_files, OPEN_INDEX_EXTENSION))
-            
+            self.open_document_file = _get_open_file(
+                _get_by_extension(all_files, OPEN_DOCUMENT_EXTENSION)
+            )
+            self.open_index_file = _get_open_file(
+                _get_by_extension(all_files, OPEN_INDEX_EXTENSION)
+            )
+
             self.closed_document_files = _get_by_extension(all_files, CLOSED_DOCUMENT_EXTENSION)
             self.closed_index_files = _get_by_extension(all_files, CLOSED_INDEX_EXTENSION)
         else:
@@ -40,7 +47,7 @@ class PersistantDirectory(Directory):
 
     def write_to_index(self, document_id, text):
         if not self.open_index_file:
-            self._get_new_file(OPEN_INDEX_EXTENSION, self.open_index_file)
+            self._get_new_file(OPEN_INDEX_EXTENSION)
             self.open_index = Index()
         with self.open_index as open_index:
             open_index.write(document_id, text)
@@ -50,15 +57,17 @@ class PersistantDirectory(Directory):
         _write_data_to_file(self.open_index_file, self.open_index)
 
     def append_document(self, document_id, document):
+        # TODO - call this when committing, and flush to rest of documents
         if not self.open_document_file:
-            self._get_new_file(OPEN_DOCUMENT_EXTENSION, self.open_document_file)
+            self.open_document_file = self._get_new_file(OPEN_DOCUMENT_EXTENSION)
         _write_data_to_file(self.open_document_file, {document_id: document})
     
-    def _get_new_file(self, extension, current_file):
+    def _get_new_file(self, extension):
         # TODO - Check if it already exists
         file_name = uuid.uuid4().hex[:6]
         complete_path = f"{self.directory_path}/{file_name}{extension}"
-        with open(complete_path, "wb+"): current_file = complete_path
+        with open(complete_path, "wb+"): pass
+        return complete_path
         
     
 
@@ -86,7 +95,7 @@ def _get_open_file(open_files):
     return None
 
     
-def _write_data_to_file(data, filename):
+def _write_data_to_file(filename, data):
     # TODO - Should go in the IndexWriter?
     data_as_bytes = io.BytesIO()
     pickle.dump(data, data_as_bytes)
