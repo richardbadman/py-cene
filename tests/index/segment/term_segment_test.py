@@ -55,3 +55,67 @@ def test_when_writing_more_than_one_document_then_check_the_contents_of_the_segm
         
     actual_result = segment.dictionary
     assert expected_result == actual_result
+
+    
+def test_when_merging_two_term_segments_with_no_duplicates_verify_output():
+    expected_result = {
+        "simple": {
+            "IXA": 1
+        },
+        "string": {
+            "IXA": 1
+        },
+        "another": {
+            "XBA": 1
+        },
+        "word": {
+            "XBA": 1
+        }
+    }
+    
+    id_one = "IXA"
+    data_one = ["simple", "string"]
+    id_two = "XBA"
+    data_two = ["another", "word"]
+    
+    segment_one = TermSegment()
+    segment_two = TermSegment()
+    
+    segment_one.write(id_one, content=data_one)
+    segment_two.write(id_two, content=data_two)
+    
+    segment_one.merge(segment_two)
+    actual_result = segment_one.dictionary
+    
+    assert expected_result == actual_result
+
+    
+def test_when_merging_two_term_segments_with_some_duplicates_verify_contents():
+    expected_result = {
+        "simple": {
+            "IXA": 1
+        },
+        "string": {
+            "IXA": 1,
+            "XBA": 1
+        },
+        "another": {
+            "XBA": 1
+        }
+    }
+    
+    id_one = "IXA"
+    data_one = ["simple", "string"]
+    id_two = "XBA"
+    data_two = ["another", "string"]
+    
+    segment_one = TermSegment()
+    segment_two = TermSegment()
+    
+    segment_one.write(id_one, content=data_one)
+    segment_two.write(id_two, content=data_two)
+    
+    segment_one.merge(segment_two)
+    actual_result = segment_one.dictionary
+    
+    assert expected_result == actual_result
