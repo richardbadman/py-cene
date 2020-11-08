@@ -36,7 +36,7 @@ class DocumentWriter:
         
     def write_document(self):
         if not self.document.validate():
-            raise ValueError("No fields for document are being index, please add one")
+            raise ValueError("No fields for document are being indexed, please add one")
         internal_id_field = StringField("_id", self.id, store=True, index=False)
         self.document.add(internal_id_field)
         for field in self.document:
