@@ -60,3 +60,39 @@ def test_when_writing_more_than_one_document_then_check_the_contents_of_the_segm
 
     actual_result = segment.dictionary
     assert expected_results == actual_result
+
+    
+def test_when_merging_two_data_segments_then_verify_contents():
+    expected_results = {
+        "IXA": {
+            "test": "A simple string"
+        },
+        "XBA": {
+            "info": "Another string!"
+        }
+    }
+    id_one = "IXA"
+    key_one = "test"
+    data_one = "A simple string"
+    id_two = "XBA"
+    key_two = "info"
+    data_two = "Another string!"
+    
+    segment_one = DataSegment()
+    segment_two = DataSegment()
+    
+    segment_one.write(
+        id_one, 
+        field_key=key_one,
+        content=data_one
+    )
+    segment_two.write(
+        id_two,
+        field_key=key_two,
+        content=data_two
+    ) 
+    
+    segment_one.merge(segment_two)
+    actual_result = segment_one.dictionary
+    
+    assert expected_results == actual_result

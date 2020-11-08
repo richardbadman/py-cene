@@ -9,5 +9,5 @@ class DataSegment(Segment):
         else:
             self.dictionary[document_id] = {key: kwargs["content"]}
 
-    def combine(self, other):
-        pass
+    def merge(self, other):
+        self.dictionary = {**self.dictionary, **other.dictionary}

@@ -13,6 +13,20 @@ class TermSegment(Segment):
             else:
                 self.dictionary[word] = {document_id: 1}
 
-    def combine(self, other):
-        pass
-       
+    def merge(self, other):
+        self.dictionary = {
+            key: _merge(
+                self.dictionary.get(key),
+                other.dictionary.get(key)
+            )
+            for key in set(self.dictionary).union(other.dictionary)
+        }
+
+
+def _merge(this, other):
+    if this is None:
+        return other
+    elif other is None:
+        return this
+    else:
+        return {**this, **other}

@@ -10,7 +10,7 @@ class Segment(ABC):
         pass
 
     @abstractmethod
-    def combine(self, other):
+    def merge(self, other):
         if isinstance(other, Segment):
             pass
         raise ValueError(f"Expected other Segment type, got {type(other)}")
