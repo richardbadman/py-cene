@@ -9,3 +9,7 @@ class Document:
         if not isinstance(field, Field):
             raise ValueError("Field was not a field type")
         self.fields.append(field)
+
+    def __iter__(self):
+        for n in range(len(self.fields)):
+            yield self.fields[n]
