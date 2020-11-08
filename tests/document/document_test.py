@@ -35,3 +35,29 @@ def test_when_adding_multiple_fields_then_values_differ():
     
     actual_result = [field.value for field in document]
     assert expected_result == actual_result
+
+
+def test_when_adding_fields_and_indexing_defaults_to_true_then_validate_returns_true():
+    expected_result = True
+    string_field = StringField("test", "test")
+    text_field = TextField("test", "A simple string")
+    document = Document()
+    
+    document.add(string_field)
+    document.add(text_field)
+    
+    actual_result = document.validate()
+    assert expected_result == actual_result
+    
+    
+def test_when_adding_fields_and_not_indexing_then_validate_returns_false():
+    expected_result = False
+    string_field = StringField("test", "test", index=False)
+    text_field = TextField("test", "A simple string", index=False)
+    document = Document()
+    
+    document.add(string_field)
+    document.add(text_field)
+    
+    actual_result = document.validate()
+    assert expected_result == actual_result
